@@ -1,5 +1,7 @@
 ### Solid Auth
 
+Recommended to use [create jd app](https://github.com/OrJDev/create-jd-app)
+
 ```bash
 npm install solidjs-auth
 ```
