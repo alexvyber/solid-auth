@@ -1,0 +1,63 @@
+export interface Session {
+  /**
+   * A unique identifier for this session.
+   *
+   * Note: This will be the empty string for newly created sessions and
+   * sessions that are not backed by a database (i.e. cookie-based sessions).
+   */
+  readonly id: string;
+
+  /**
+   * The raw data contained in this session.
+   *
+   * This is useful mostly for SessionStorage internally to access the raw
+   * session data to persist.
+   */
+  readonly data: SessionData;
+
+  /**
+   * Returns `true` if the session has a value for the given `name`, `false`
+   * otherwise.
+   */
+  has(name: string): boolean;
+
+  /**
+   * Returns the value for the given `name` in this session.
+   */
+  get(name: string): any;
+
+  /**
+   * Sets a value in the session for the given `name`.
+   */
+  set(name: string, value: any): void;
+
+  /**
+   * Sets a value in the session that is only valid until the next `get()`.
+   * This can be useful for temporary values, like error messages.
+   */
+  flash(name: string, value: any): void;
+
+  /**
+   * Removes a value from the session.
+   */
+  unset(name: string): void;
+}
+
+export interface SessionData {
+  [name: string]: any;
+}
+
+export type IsSessionFunction = (object: any) => object is Session;
+
+export const isSession: IsSessionFunction = (object): object is Session => {
+  return (
+    object != null &&
+    typeof object.id === "string" &&
+    typeof object.data !== "undefined" &&
+    typeof object.has === "function" &&
+    typeof object.get === "function" &&
+    typeof object.set === "function" &&
+    typeof object.flash === "function" &&
+    typeof object.unset === "function"
+  );
+};
