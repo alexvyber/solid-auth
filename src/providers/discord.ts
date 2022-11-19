@@ -190,7 +190,13 @@ export class DiscordStrategy<User> extends OAuth2Strategy<
       },
     });
     const raw: DiscordProfile["__json"] = await response.json();
-
+    if (raw.avatar === null) {
+      const defaultAvatarNumber = parseInt(raw.discriminator) % 5;
+      raw.avatar = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarNumber}.png`;
+    } else {
+      const format = raw.avatar.startsWith("a_") ? "gif" : "png";
+      raw.avatar = `https://cdn.discordapp.com/avatars/${raw.id}/${raw.avatar}.${format}`;
+    }
     const profile: DiscordProfile = {
       provider: SocialProvider.discord,
       id: raw.id,
