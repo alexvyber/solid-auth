@@ -1,3 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { type ISocialProvider } from "./providers";
+import { type Authenticator } from "./authenticator";
+
+export type IAction = "login" | "logout";
+export type WithProvider<T extends IAction> = T extends "login"
+  ? {
+      provider: ISocialProvider;
+      type: T;
+      opts: Parameters<Authenticator["authenticate"]>[2];
+    }
+  : {
+      type: T;
+      opts: Parameters<Authenticator["logout"]>[1];
+    };
+
 export interface Session {
   /**
    * A unique identifier for this session.
@@ -61,3 +77,9 @@ export const isSession: IsSessionFunction = (object): object is Session => {
     typeof object.unset === "function"
   );
 };
+
+export type IAuthStatus =
+  | "authenticated"
+  | "unauthenticated"
+  | "loading"
+  | "error";

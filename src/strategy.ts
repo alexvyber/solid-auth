@@ -1,4 +1,4 @@
-import { json, redirect, SessionStorage } from "solid-start";
+import { json, redirect, type SessionStorage } from "solid-start";
 import { AuthorizationError } from "./error";
 
 /**
@@ -156,6 +156,7 @@ export abstract class Strategy<User, VerifyOptions> {
       request.headers.get("Cookie")
     );
 
+    session.unset("opts");
     // if we do have a successRedirect, we redirect to it and set the user
     // in the session sessionKey
     session.set(options.sessionKey, user);
@@ -166,14 +167,5 @@ export abstract class Strategy<User, VerifyOptions> {
         Location: options.successRedirect,
       },
     });
-    // return json(
-    //   { redirect: options.successRedirect, verified: true },
-    //   {
-    //     headers: {
-    //       "Set-Cookie": await sessionStorage.commitSession(session),
-    //       Location: options.successRedirect,
-    //     },
-    //   }
-    // );
   }
 }

@@ -1,5 +1,5 @@
 import { redirect, json } from "solid-start";
-import { Authenticator } from "./authenticator";
+import { type Authenticator } from "./authenticator";
 
 type AuthorizeArgs<User, Data> = Omit<RuleContext<User, Data>, "user">;
 
@@ -76,14 +76,14 @@ export class Authorizer<User = unknown, Data = unknown> {
         throw json({ message: "Not authenticated." }, { status: 401 });
       }
       if (raise === "redirect") {
-        throw redirect(failureRedirect);
+        throw redirect(failureRedirect ?? "/");
       }
       throw new Error("Not authenticated.");
     }
 
     for (const rule of [...this.rules, ...rules]) {
       if (await rule({ user, ...args })) continue;
-      if (raise === "redirect") throw redirect(failureRedirect);
+      if (raise === "redirect") throw redirect(failureRedirect ?? "/");
       if (raise === "response") {
         if (!rule.name) throw json({ message: "Forbidden" }, { status: 403 });
         throw json(

@@ -1,5 +1,5 @@
 import { SocialProvider } from ".";
-import { type StrategyVerifyCallback } from "../";
+import { type StrategyVerifyCallback } from "../strategy";
 import {
   type OAuth2Profile,
   type OAuth2StrategyVerifyParams,

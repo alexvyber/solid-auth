@@ -1,5 +1,9 @@
-import { json, SessionStorage } from "solid-start";
-import { AuthenticateOptions, Strategy, StrategyVerifyCallback } from ".";
+import { json, type SessionStorage } from "solid-start";
+import {
+  type AuthenticateOptions,
+  Strategy,
+  type StrategyVerifyCallback,
+} from "./strategy";
 import { v4 as uuid } from "uuid";
 
 export interface OAuth2Profile {
@@ -142,6 +146,7 @@ export class OAuth2Strategy<
     if (url.pathname !== callbackURL.pathname) {
       const state = this.generateState();
       session.set(this.sessionStateKey, state);
+      session.set("opts", options);
       const newSess = await sessionStorage.commitSession(session);
       const reURI = this.getAuthorizationURL(request, state).toString();
       return json(
@@ -176,24 +181,23 @@ export class OAuth2Strategy<
 
     const { accessToken, refreshToken, extraParams } =
       await this.fetchAccessToken(code, params);
-
     // Get the profile
     const profile = await this.userProfile(accessToken, extraParams);
     // Verify the user and return it, or redirect
-
+    const newOpts = session.get("opts") ?? {};
     try {
       user = await this.verify({
         accessToken,
         refreshToken,
         extraParams,
         profile,
-        context: options.context,
+        context: newOpts.context,
       });
     } catch (error) {
       const message = (error as Error).message;
-      return await this.failure(message, request, sessionStorage, options);
+      return await this.failure(message, request, sessionStorage, newOpts);
     }
-    return await this.success(user, request, sessionStorage, options);
+    return await this.success(user, request, sessionStorage, newOpts);
   }
 
   /**

@@ -1,7 +1,7 @@
-import type { StrategyVerifyCallback } from "..";
+import type { StrategyVerifyCallback } from "../strategy";
 import {
-  OAuth2Profile,
-  OAuth2StrategyVerifyParams,
+  type OAuth2Profile,
+  type OAuth2StrategyVerifyParams,
   OAuth2Strategy,
 } from "../oauth";
 import { SocialProvider } from ".";

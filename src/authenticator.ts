@@ -1,10 +1,12 @@
 import { json, redirect, type SessionStorage } from "solid-start";
-import { isSession, Session } from "./session";
+import { isSession, type Session } from "./types";
 import { type AuthenticateOptions, type Strategy } from "./strategy";
 
 export interface AuthenticateCallback<User> {
   (user: User): Promise<Response>;
 }
+
+export const DEFAULT_SESS_KEY = "user";
 
 /**
  * Extra options for the authenticator.
@@ -36,7 +38,7 @@ export class Authenticator<User = unknown> {
     private sessionStorage: SessionStorage,
     options: AuthenticatorOptions = {}
   ) {
-    this.sessionKey = options.sessionKey || "user";
+    this.sessionKey = options.sessionKey || DEFAULT_SESS_KEY;
     this.sessionErrorKey = options.sessionErrorKey || "auth:error";
     this.sessionStrategyKey = options.sessionStrategyKey || "strategy";
     this.throwOnError = options.throwOnError ?? false;

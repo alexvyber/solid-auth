@@ -1,4 +1,5 @@
-import { AuthorizationError, type StrategyVerifyCallback } from "..";
+import { type StrategyVerifyCallback } from "../strategy";
+import { AuthorizationError } from "../error";
 import {
   type OAuth2Profile,
   OAuth2Strategy,

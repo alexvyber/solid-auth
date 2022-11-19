@@ -1,7 +1,7 @@
-import type { StrategyVerifyCallback } from "..";
+import type { StrategyVerifyCallback } from "../strategy";
 import {
-  OAuth2Profile,
-  OAuth2StrategyVerifyParams,
+  type OAuth2Profile,
+  type OAuth2StrategyVerifyParams,
   OAuth2Strategy,
 } from "../oauth";
 import { SocialProvider } from ".";
@@ -139,6 +139,7 @@ export type FacebookStrategyOptions = {
 export type FacebookProfile = {
   id: string;
   displayName: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _json: Record<AdditionalFacebookProfileField, any>;
 } & OAuth2Profile;
 

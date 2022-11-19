@@ -1,15 +1,16 @@
 import { json, type APIEvent } from "solid-start";
-import { Authenticator } from "./authenticator";
-import { ISocialProvider } from "./providers";
-import { withApiHandler } from "./utils/withAPIHandler";
+import { type Authenticator } from "./authenticator";
+import { type ISocialProvider } from "./providers";
+import { withApiHandler } from "./helpers/withAPIHandler";
+import { type IAction, type WithProvider } from "./types";
 
 export const createSolidAuthHandler = <User>(
   authenticator: Authenticator<User>
 ) => {
   return async (event: APIEvent) => {
-    const params = new URL(event.request.url).searchParams;
-    const opts = JSON.parse(params.get("opts") ?? "{}");
     if (event.request.method === "POST") {
+      const params = new URL(event.request.url).searchParams;
+      const opts = JSON.parse(params.get("opts") ?? "{}");
       const type = params.get("type");
       switch (type) {
         case "login": {
@@ -45,11 +46,9 @@ export const createSolidAuthHandler = <User>(
       const callbackIdx = url.pathname.lastIndexOf("/callback");
       const provider = url.pathname.slice(1, callbackIdx).split("/").pop();
       if (!provider) {
-        throw new Error("No provider specified");
+        return json({ error: "No provider specified" });
       }
-      return await authenticator.authenticate(provider, event.request, {
-        successRedirect: "/",
-      });
+      return await authenticator.authenticate(provider, event.request);
     }
   };
 };
@@ -65,12 +64,10 @@ export const createSolidAuthClient = (authURL: string) => {
       }),
     login: async <K extends ISocialProvider>(
       provider: K,
-      opts: K extends "discord"
-        ? Omit<IOpts, "successRedirect" | "failureRedirect"> & {
-            successRedirect: string;
-            failureRedirect: string;
-          }
-        : IOpts
+      opts: Omit<IOpts, "successRedirect" | "failureRedirect"> & {
+        successRedirect: string;
+        failureRedirect: string;
+      }
     ) =>
       await wrapper({
         type: "login",
@@ -80,17 +77,6 @@ export const createSolidAuthClient = (authURL: string) => {
   };
 };
 
-type IAction = "login" | "logout";
-type WithProvider<T extends IAction> = T extends "login"
-  ? {
-      provider: ISocialProvider;
-      type: T;
-      opts: Parameters<Authenticator["authenticate"]>[2];
-    }
-  : {
-      type: T;
-      opts: Parameters<Authenticator["logout"]>[1];
-    };
 const withHandler =
   (authURL: string) =>
   async <T extends IAction>(body: WithProvider<T>) => {
@@ -106,6 +92,12 @@ const withHandler =
     const json = await res.json();
     if ("redirect" in json) {
       return (window.location.href = json.redirect);
+    }
+    if ("error" in json) {
+      throw new Error(json.error);
+    }
+    if ("message" in json) {
+      throw new Error(json.message);
     }
     return json;
   };
