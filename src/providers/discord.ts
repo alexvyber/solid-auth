@@ -56,7 +56,7 @@ export interface DiscordProfile extends OAuth2Profile {
   id: string;
   displayName: string;
   emails?: [{ value: string }];
-  photos?: [{ value: string }];
+  photos: [{ value: string }];
   __json: {
     /**
      * the user's id
@@ -190,22 +190,25 @@ export class DiscordStrategy<User> extends OAuth2Strategy<
       },
     });
     const raw: DiscordProfile["__json"] = await response.json();
-    if (raw.avatar === null) {
-      const defaultAvatarNumber = parseInt(raw.discriminator) % 5;
-      raw.avatar = `https://cdn.discordapp.com/embed/avatars/${defaultAvatarNumber}.png`;
-    } else {
-      const format = raw.avatar.startsWith("a_") ? "gif" : "png";
-      raw.avatar = `https://cdn.discordapp.com/avatars/${raw.id}/${raw.avatar}.${format}`;
-    }
+    const newAvatar =
+      raw.avatar === null
+        ? `https://cdn.discordapp.com/embed/avatars/${
+            parseInt(raw.discriminator) % 5
+          }.png`
+        : `https://cdn.discordapp.com/avatars/${raw.id}/${raw.avatar}.${
+            raw.avatar.startsWith("a_") ? "gif" : "png"
+          }`;
     const profile: DiscordProfile = {
       provider: SocialProvider.discord,
       id: raw.id,
       displayName: raw.username,
       emails: raw.email ? [{ value: raw.email }] : undefined,
-      photos: raw.avatar ? [{ value: raw.avatar }] : undefined,
-      __json: raw,
+      photos: [{ value: newAvatar }],
+      __json: {
+        ...raw,
+        avatar: newAvatar,
+      },
     };
-
     return profile;
   }
 

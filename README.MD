@@ -52,7 +52,7 @@ export const authenticator = new Authenticator<User>(sessionStorage).use(
           data: {
             id: profile.id,
             displayName: profile.__json.username,
-            avatar: profile.__json.avatar,
+            avatar: profile.photos[0],
           },
         });
       }
