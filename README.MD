@@ -39,7 +39,7 @@ export const authenticator = new Authenticator<User>(sessionStorage).use(
     {
       clientID: process.env.DISCORD_CLIENT_ID,
       clientSecret: process.env.DISCORD_CLIENT_SECRET,
-      callbackURL: process.env.SITE_URL + "/auth/discord/callback",
+      callbackURL: process.env.SITE_URL + "/api/auth/discord/callback",
     },
     async ({ profile }) => {
       let user = await prisma.user.findUnique({
