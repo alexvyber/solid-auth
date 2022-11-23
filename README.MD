@@ -85,6 +85,61 @@ export const POST = handler;
 export const GET = handler;
 ```
 
+### Protected Routers
+
+As you know SolidStart routeData is being loaded while rendering the page, therefore the user can access protected content for about few seconds before the page redirects him to the login page, so I had to figure out how to create an actual protected router and here is what i came up with:
+
+```tsx
+import { type User } from "@prisma/client"; // the type of the user
+import { Match, Switch, type Component } from "solid-js";
+import { useRouteData } from "solid-start";
+import { createServerData$, redirect } from "solid-start/server";
+import { authenticator } from "~/server/auth"; // where your authenticator is located
+
+export const withProtected = (Component: ProtectedRouter) => {
+  const routeData = () => {
+    return createServerData$(async (_, { request }) => {
+      const user = await authenticator.isAuthenticated(request);
+      if (!user) {
+        throw redirect("/account");
+      }
+      return user;
+    });
+  };
+  return {
+    routeData,
+    Page: () => {
+      const current = useRouteData<typeof routeData>();
+      return (
+        <Switch fallback={<h1>Loading</h1>}>
+          {/* if current is response, meaning that the routeData is trying to redirect the user*/}
+          <Match when={current() && !(current() instanceof Response)}>
+            <Component {...(current() as User)} />
+          </Match>
+        </Switch>
+      );
+    },
+  };
+};
+
+export type ProtectedRouter = Component<User>;
+```
+
+"But this seems complicated" you might say, well it actually isn't, check out how easily it can be used:
+
+```tsx
+import { withProtected } from "../layouts/Protected";
+
+// this will only get mounted when user is logged in
+export const { routeData, Page } = withProtected((user) => {
+  // user is typesafed, meaning that you don't need to use ?.displayName
+  return <h1>Hey {user.displayName}</h1>;
+});
+
+// The page will be wrapped in a switch that will handle the dirty for us
+export default Page;
+```
+
 ### Supported Providers
 
 Check out [remix auth social](https://github.com/TheRealFlyingCoder/remix-auth-socials) for more info
