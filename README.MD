@@ -6,10 +6,14 @@ Recommended to use [create jd app](https://github.com/OrJDev/create-jd-app)
 npm install solidjs-auth
 ```
 
+### Enviroment Variables
+
+- Set the `SITE_URL` to your production / local url when using oauth2 to get the callback url to work.
+
 ### Creating Session Storage
 
 ```ts
-// /auth.ts
+// utils/auth.ts
 import { createCookieSessionStorage } from "solid-start";
 
 export const sessionStorage = createCookieSessionStorage({
@@ -23,7 +27,7 @@ export const sessionStorage = createCookieSessionStorage({
 });
 ```
 
-### Creating An Authenticator Client
+### Creating An Authenticator 
 
 You can choose any provider you wish, in this examle we are going to use discord and prisma
 
@@ -31,7 +35,7 @@ You can choose any provider you wish, in this examle we are going to use discord
 // server/auth.ts
 import { type User } from "@prisma/client"; // any user type you wish
 import { prisma } from "./db/client"; // any db you wish
-import { sessionStorage } from "~/auth"; // the session storage we created before
+import { sessionStorage } from "~/utils/auth"; // the session storage we created before
 import { Authenticator, DiscordStrategy } from "solidjs-auth";
 
 export const authenticator = new Authenticator<User>(sessionStorage).use(
@@ -39,7 +43,7 @@ export const authenticator = new Authenticator<User>(sessionStorage).use(
     {
       clientID: process.env.DISCORD_CLIENT_ID,
       clientSecret: process.env.DISCORD_CLIENT_SECRET,
-      callbackURL: process.env.SITE_URL + "/api/auth/discord/callback",
+      callbackURL: process.env.SITE_URL + "/api/auth/discord/callback", // the variable we created above
     },
     async ({ profile }) => {
       let user = await prisma.user.findUnique({
@@ -111,10 +115,9 @@ export const withProtected = (Component: ProtectedRouter) => {
     Page: () => {
       const current = useRouteData<typeof routeData>();
       return (
-        <Switch fallback={<h1>Loading</h1>}>
-          {/* if current is response, meaning that the routeData is trying to redirect the user*/}
-          <Match when={current() && !(current() instanceof Response)}>
-            <Component {...(current() as User)} />
+        <Switch fallback={<Component {...(current() as User)} />}>
+          <Match when={current.loading || current() instanceof Response}>
+            <Spinner />
           </Match>
         </Switch>
       );
@@ -140,7 +143,17 @@ export const { routeData, Page } = withProtected((user) => {
 export default Page;
 ```
 
-### Supported Providers
+### Project examples
+
+#### Hackernews + Github Auth
+
+- [View Code](https://github.com/nexxeln/hackernews)
+- [Try It Yourself](https://hn.nxl.sh/)
+
+#### Todos + Discord Auth
+
+- [View Code](https://github.com/OrJDev/jd-todos)
+- [Try It Yourself](https://jd-todos.vercel.app/)
 
 Check out [remix auth social](https://github.com/TheRealFlyingCoder/remix-auth-socials) for more info
 
