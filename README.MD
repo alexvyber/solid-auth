@@ -73,6 +73,15 @@ export const authenticator = new Authenticator<User>(sessionStorage).use(
 import { createSolidAuthClient } from "solidjs-auth";
 const myURL = "http://localhost:3000";
 export const authClient = createSolidAuthClient(`${myURL}/api/auth`);
+
+// sign in 
+ authClient.login("discord", {
+    successRedirect: "/",
+    failureRedirect: "/account",
+})
+
+// sign out 
+authClient.logout({ redirectTo: "/account" })
 ```
 
 ### Creating The API Handler
