@@ -1,6 +1,6 @@
 {
-  "name": "solidjs-auth",
-  "version": "0.0.8",
+  "name": "solid-auth",
+  "version": "0.0.1",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,7 +12,8 @@
     ".": {
       "solid": "./dist/index.js",
       "default": "./dist/index.js"
-    }
+    },
+    "./providers/*": "./dist/providers/*.js"
   },
   "sideEffects": false,
   "files": [

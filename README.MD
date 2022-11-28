@@ -3,7 +3,7 @@
 Recommended to use [create jd app](https://github.com/OrJDev/create-jd-app)
 
 ```bash
-npm install solidjs-auth
+npm install solid-auth
 ```
 
 ### Creating Session Storage
@@ -32,7 +32,7 @@ You can choose any provider you wish, in this examle we are going to use discord
 import { type User } from "@prisma/client"; // any user type you wish
 import { prisma } from "./db/client"; // any db you wish
 import { sessionStorage } from "~/auth"; // the session storage we created before
-import { Authenticator, DiscordStrategy } from "solidjs-auth";
+import { Authenticator, DiscordStrategy } from "solid-auth";
 
 export const authenticator = new Authenticator<User>(sessionStorage).use(
   new DiscordStrategy(
@@ -66,7 +66,7 @@ export const authenticator = new Authenticator<User>(sessionStorage).use(
 
 ```ts
 // utils/auth.ts
-import { createSolidAuthClient } from "solidjs-auth";
+import { createSolidAuthClient } from "solid-auth";
 const myURL = "http://localhost:3000";
 export const authClient = createSolidAuthClient(`${myURL}/api/auth`);
 ```
@@ -77,7 +77,7 @@ export const authClient = createSolidAuthClient(`${myURL}/api/auth`);
 // routes/api/auth/[...solidauth].ts
 import { type User } from "@prisma/client"; // the type of that user
 import { authenticator } from "~/server/auth"; // the Authenticator we created before
-import { createSolidAuthHandler } from "solidjs-auth";
+import { createSolidAuthHandler } from "solid-auth";
 
 const handler = createSolidAuthHandler<User>(authenticator);
 
