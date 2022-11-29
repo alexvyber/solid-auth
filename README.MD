@@ -3,7 +3,7 @@
 Recommended to use [create jd app](https://github.com/OrJDev/create-jd-app)
 
 ```bash
-npm install solidjs-auth
+npm install solid-auth
 ```
 
 ### Enviroment Variables
@@ -36,7 +36,7 @@ You can choose any provider you wish, in this examle we are going to use discord
 import { type User } from '@prisma/client' // any user type you wish
 import { prisma } from './db/client' // any db you wish
 import { sessionStorage } from '~/utils/auth' // the session storage we created before
-import { Authenticator, DiscordStrategy } from 'solidjs-auth'
+import { Authenticator, DiscordStrategy } from 'solid-auth'
 
 export const authenticator = new Authenticator<User>(sessionStorage).use(
   new DiscordStrategy(
@@ -70,7 +70,7 @@ export const authenticator = new Authenticator<User>(sessionStorage).use(
 
 ```ts
 // utils/auth.ts
-import { createSolidAuthClient } from 'solidjs-auth'
+import { createSolidAuthClient } from 'solid-auth'
 const myURL = 'http://localhost:3000'
 export const authClient = createSolidAuthClient(`${myURL}/api/auth`)
 
@@ -90,7 +90,7 @@ authClient.logout({ redirectTo: '/account' })
 // routes/api/auth/[...solidauth].ts
 import { type User } from '@prisma/client' // the type of that user
 import { authenticator } from '~/server/auth' // the Authenticator we created before
-import { createSolidAuthHandler } from 'solidjs-auth'
+import { createSolidAuthHandler } from 'solid-auth'
 
 const handler = createSolidAuthHandler<User>(authenticator)
 
@@ -175,7 +175,3 @@ Check out [remix auth social](https://github.com/TheRealFlyingCoder/remix-auth-s
 ### Credits
 
 All credits belong to [remix auth](https://github.com/sergiodxa/remix-auth) & [remix auth social](https://github.com/TheRealFlyingCoder/remix-auth-socials) team who worked really hard on this (all i did was replacing remix stuff with solid start).
-
-### Developing
-
-This monorepo uses npm workspaces and Turborepo. To install dependencies, run `npm install` in the root directory. To build the packages, run `npm run build` in the root directory. `npm run dev` will watch for changes, rebuild the packages and start the dev server.
