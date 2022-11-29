@@ -8,14 +8,12 @@ export const createSolidAuthHandler = <User>(
 ) => {
   return async (event: APIEvent) => {
     if (event.request.method === 'POST') {
-      const params = new URL(event.request.url).searchParams
-      const opts = JSON.parse(params.get('opts') ?? '{}')
-      const type = params.get('type')
-
+      const body = await event.request.clone().json()
+      const { opts, type } = body
       switch (type) {
         case 'login': {
           return await withApiHandler(async () => {
-            const provider = params.get('provider')
+            const { provider } = body
             if (!provider) {
               throw new Error('No provider specified')
             }
@@ -31,8 +29,7 @@ export const createSolidAuthHandler = <User>(
             throw new Error('redirectTo is required')
           }
           try {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            return await authenticator.logout(event.request, opts as any)
+            return await authenticator.logout(event.request, opts)
           } catch (e) {
             return json({ error: eToString(e) })
           }
@@ -80,15 +77,13 @@ export const createSolidAuthClient = (authURL: string) => {
 const withHandler =
   (authURL: string) =>
   async <T extends IAction>(body: WithProvider<T>) => {
-    const res = await fetch(
-      `${authURL}?type=${body.type}&opts=${JSON.stringify(body.opts)}${
-        body.type === 'login' ? `&provider=${body.provider}` : ''
-      }`,
-      {
-        method: 'POST',
-        body: JSON.stringify(body),
-      }
-    )
+    const res = await fetch(authURL, {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
     const json = await res.json()
     if ('redirect' in json) {
       return (window.location.href = json.redirect)
