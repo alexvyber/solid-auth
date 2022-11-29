@@ -8,6 +8,7 @@
   ],
   "license": "ISC",
   "author": "OrJDev",
+  "type": "module",
   "scripts": {
     "build": "turbo build",
     "clean": "turbo clean && rm -rf node_modules pnpm-lock.yaml",
