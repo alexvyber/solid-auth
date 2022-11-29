@@ -27,13 +27,13 @@
   },
   "dependencies": {
     "@solid-auth/core": "workspace:*",
-    "@solid-auth/oauth": "workspace:*"
+    "@solid-auth/oauth2": "workspace:*"
   },
   "devDependencies": {
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@solid-auth/core": "workspace:*",
-    "@solid-auth/oauth": "workspace:*",
+    "@solid-auth/oauth2": "workspace:*",
     "solid-js": "^1.6.2",
     "solid-start": "^0.2.5",
     "typescript": "^4.9.3"

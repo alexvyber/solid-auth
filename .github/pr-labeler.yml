@@ -12,8 +12,8 @@
 '🔒 core':
   - any: ['packages/core/**']
 
-'🌐 oauth':
-  - any: ['packages/oauth/**']
+'🌐 oauth2':
+  - any: ['packages/oauth2/**']
 
 '🔏 form':
   - any: ['packages/form/**']

@@ -1,5 +1,5 @@
 {
-  "name": "@solid-auth/oauth",
+  "name": "@solid-auth/oauth2",
   "version": "0.0.0",
   "private": false,
   "repository": "https://github.com/OrJDev/solid-auth.git",
