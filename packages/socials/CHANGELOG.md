@@ -1,5 +1,14 @@
 # @solid-auth/socials
 
+## 0.0.2
+
+### Patch Changes
+
+- [`ce9d549`](https://github.com/OrJDev/solid-auth/commit/ce9d5490310655b00fa8879023c0c732ee113951) Thanks [@OrJDev](https://github.com/OrJDev)! - Fix deps
+
+- Updated dependencies [[`ce9d549`](https://github.com/OrJDev/solid-auth/commit/ce9d5490310655b00fa8879023c0c732ee113951)]:
+  - @solid-auth/oauth2@0.0.2
+
 ## 0.0.1
 
 ### Patch Changes
