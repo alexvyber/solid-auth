@@ -1,0 +1,19 @@
+'🧪 test':
+  - any: ['**/*.{test,spec}.{ts,tsx,js,jsx}']
+
+'📝 documentation':
+  - any: ['**/*.{md,mdx}']
+  - any: ['example/**']
+  - any: ['docs/**']
+
+'🔑 socials':
+  - any: ['packages/socials/**']
+
+'🔒 core':
+  - any: ['packages/core/**']
+
+'🌐 oauth':
+  - any: ['packages/oauth/**']
+
+'🔏 form':
+  - any: ['packages/form/**']

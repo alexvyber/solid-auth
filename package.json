@@ -1,44 +1,47 @@
 {
-  "name": "solidjs-auth",
-  "version": "0.0.8",
-  "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "build": "tsc && rollup -c && node scripts/cp",
-    "patch": "npm version patch --no-git-tag-version"
-  },
-  "exports": {
-    ".": {
-      "solid": "./dist/index.js",
-      "default": "./dist/index.js"
-    }
-  },
-  "sideEffects": false,
-  "files": [
-    "dist"
-  ],
-  "dependencies": {
-    "uuid": "^9.0.0"
-  },
-  "devDependencies": {
-    "@rollup/plugin-babel": "^6.0.0",
-    "@rollup/plugin-node-resolve": "^15.0.0",
-    "@solidjs/meta": "^0.28.0",
-    "@types/node": "^18.11.9",
-    "@types/uuid": "^8.3.4",
-    "solid-js": "^1.5.7",
-    "solid-start": "^0.2.5",
-    "typescript": "^4.8.2"
-  },
-  "peerDependencies": {
-    "solid-js": "^1.5.7",
-    "solid-start": "^0.2.1"
-  },
+  "name": "solid-auth-root",
+  "version": "1.0.0",
+  "private": true,
   "keywords": [
     "SolidJS",
     "SolidStart"
   ],
+  "license": "ISC",
   "author": "OrJDev",
-  "license": "ISC"
+  "scripts": {
+    "build": "turbo build",
+    "clean": "turbo clean && rm -rf node_modules",
+    "dev": "turbo dev",
+    "lint": "eslint . --fix --ext .ts,.tsx,.js,.jsx",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "*.{js,json}": "prettier --write",
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "package.json": "sort-package-json"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.25.2",
+    "@types/node": "^18.11.9",
+    "@typescript-eslint/eslint-plugin": "^5.44.0",
+    "@typescript-eslint/parser": "^5.44.0",
+    "eslint": "^8.28.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.5.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-solid": "^0.8.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.0.4",
+    "prettier": "^2.8.0",
+    "sort-package-json": "^2.1.0",
+    "tsup": "^6.5.0",
+    "turbo": "^1.6.3",
+    "typescript": "^4.9.3",
+    "vite": "^3.1.0"
+  }
 }
