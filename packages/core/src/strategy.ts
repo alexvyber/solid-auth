@@ -1,5 +1,5 @@
 import { json, redirect, type SessionStorage } from 'solid-start'
-import { AuthorizationError } from './error'
+import { AuthorizationError } from './types'
 
 /**
  * Extra information from the Authenticator to the strategy

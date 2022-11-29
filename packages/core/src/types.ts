@@ -63,8 +63,8 @@ export interface SessionData {
   [name: string]: any
 }
 
-export type IAuthStatus =
-  | 'authenticated'
-  | 'unauthenticated'
-  | 'loading'
-  | 'error'
+export class AuthorizationError extends Error {
+  constructor(message?: string, public cause?: Error) {
+    super(message)
+  }
+}
