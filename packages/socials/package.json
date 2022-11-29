@@ -26,7 +26,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@solid-auth/core": "workspace:*",
     "@solid-auth/oauth2": "workspace:*"
   },
   "devDependencies": {
